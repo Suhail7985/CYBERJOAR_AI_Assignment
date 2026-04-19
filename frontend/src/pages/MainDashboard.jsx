@@ -47,7 +47,14 @@ const MainDashboard = () => {
     <div className="flex h-screen w-full bg-[#0a0a0a] text-white overflow-hidden">
       {/* Navigation Rail */}
       <div className="w-16 h-full bg-[#111] border-r border-[#222] flex flex-col items-center py-6 gap-8">
-        <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/20 cursor-pointer hover:scale-105 transition-transform">
+        <div 
+          onClick={() => {
+            setActiveView('map');
+            setSelectedIntel(null);
+            fetchIntel(); // Refresh data from server
+          }}
+          className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/20 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+        >
           <Shield size={24} className="text-white" />
         </div>
         <button 
