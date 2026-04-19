@@ -91,15 +91,17 @@ const IntelSidebar = ({ intelList, selectedId, onSelect, onFilterChange, loading
       </div>
 
       {/* Summary Action */}
-      <div className="p-6 bg-[#0c0c0c] border-t border-[#222]">
-        <button 
-          onClick={onGenerateReport}
-          className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-600/20 active:scale-95 flex items-center justify-center gap-2"
-        >
-          <Eye size={18} />
-          GENERATE THREAT REPORT
-        </button>
-      </div>
+      {user?.role !== 'Field Agent' && (
+        <div className="p-6 bg-[#0c0c0c] border-t border-[#222]">
+          <button 
+            onClick={onGenerateReport}
+            className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-emerald-600/20 active:scale-95 flex items-center justify-center gap-2"
+          >
+            <Eye size={18} />
+            GENERATE THREAT REPORT
+          </button>
+        </div>
+      )}
     </div>
   );
 };

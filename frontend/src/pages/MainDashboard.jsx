@@ -6,7 +6,7 @@ import UploadModal from '../components/Upload/UploadModal';
 import { intelligenceApi } from '../services/api';
 import { Activity, Shield, Map as MapIcon, Database, Layers, Plus, X, FileText } from 'lucide-react';
 
-const MainDashboard = () => {
+const MainDashboard = ({ user, onLogout }) => {
   const [intelData, setIntelData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedIntel, setSelectedIntel] = useState(null);
@@ -67,7 +67,7 @@ const MainDashboard = () => {
         <button 
           onClick={() => setActiveView('database')}
           title="Intelligence Database"
-          className={`p-3 rounded-xl transition-all ${activeView === 'database' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'}`}
+          className={`p-3 rounded-xl transition-all ${activeView === 'database' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'} ${user?.role === 'Field Agent' ? 'hidden' : ''}`}
         >
           <Database size={22} />
         </button>
@@ -81,14 +81,31 @@ const MainDashboard = () => {
         <button 
           onClick={() => setActiveView('layers')}
           title="System Layers"
-          className={`p-3 rounded-xl transition-all ${activeView === 'layers' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'}`}
+          className={`p-3 rounded-xl transition-all ${activeView === 'layers' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'} ${user?.role !== 'Commander' ? 'hidden' : ''}`}
         >
           <Layers size={22} />
         </button>
-        <div className="mt-auto pb-4">
+        
+        <div className="mt-auto pb-4 flex flex-col gap-4">
+           <div className="group relative">
+              <div className="w-10 h-10 bg-[#1a1a1a] rounded-xl flex items-center justify-center border border-white/5 cursor-help">
+                 <span className="text-emerald-500 font-bold text-xs">{user?.name?.substring(0, 2).toUpperCase()}</span>
+              </div>
+              <div className="absolute left-14 top-0 bg-[#1a1a1a] border border-[#333] p-3 rounded-xl invisible group-hover:visible transition-all w-48 z-[50]">
+                 <div className="text-xs font-bold text-white mb-1">{user?.name}</div>
+                 <div className="text-[10px] text-emerald-500 uppercase font-bold tracking-tighter mb-2">{user?.role}</div>
+                 <button 
+                   onClick={onLogout}
+                   className="w-full text-left text-[10px] text-red-500 hover:text-red-400 font-bold flex items-center gap-2 border-t border-white/5 pt-2"
+                 >
+                    TERMINATE SESSION
+                 </button>
+              </div>
+           </div>
            <button 
              onClick={() => setIsUploadOpen(true)}
-             className="w-10 h-10 bg-emerald-500 hover:bg-emerald-400 rounded-full flex items-center justify-center shadow-lg transition-all active:scale-90"
+             title="Ingest Intelligence"
+             className="w-10 h-10 bg-emerald-500 hover:bg-emerald-400 rounded-xl flex items-center justify-center shadow-lg transition-all active:scale-90"
            >
              <Plus size={24} className="text-white" />
            </button>
@@ -298,6 +315,7 @@ const MainDashboard = () => {
             onSelect={setSelectedIntel}
             onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
             onGenerateReport={() => setIsReportOpen(true)}
+            user={user}
           />
         </div>
       </div>

@@ -19,7 +19,10 @@ app.use('/uploads', express.static('uploads'));
 
 // Mount routers
 const intelligenceRouter = require('./src/routes/intelligenceRoutes');
+const authRouter = require('./src/routes/authRoutes');
+
 app.use('/api/intelligence', intelligenceRouter);
+app.use('/api/auth', authRouter);
 
 // Health check
 app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok', msg: 'Intelligence API running' }));
