@@ -10,14 +10,20 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    
-    if (savedUser && token) {
-      setUser(JSON.parse(savedUser));
-      setView('dashboard');
+    try {
+      const savedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+      
+      if (savedUser && token) {
+        setUser(JSON.parse(savedUser));
+        setView('dashboard');
+      }
+    } catch (err) {
+      console.error('Failed to load session:', err);
+      localStorage.clear();
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   const handleLogout = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search, Filter, Clock, MapPin, Eye, AlertCircle, ChevronRight } from 'lucide-react';
 
-const IntelSidebar = ({ intelList, selectedId, onSelect, onFilterChange, loading, onGenerateReport }) => {
+const IntelSidebar = ({ intelList, selectedId, onSelect, onFilterChange, loading, onGenerateReport, user }) => {
   return (
     <div className="w-96 h-full bg-[#0f0f0f] border-l border-[#222] flex flex-col shadow-2xl z-20">
       {/* Search & Filter Section */}
