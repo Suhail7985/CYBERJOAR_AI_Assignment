@@ -1,90 +1,111 @@
 # 🛡️ CyberJoar Fusion: Tactical Intelligence System
 
-**CyberJoar Fusion** is a high-fidelity, open-source common operating picture (COP) designed for field commanders, strategic analysts, and tactical agents. It fuses multiple intelligence streams—OSINT, HUMINT, and IMINT—into a single, unified geospatial interface to provide total situational dominance.
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-LTS-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+
+**CyberJoar Fusion** is a high-fidelity, open-source Common Operating Picture (COP) designed for field commanders, strategic analysts, and tactical agents. It fuses multiple intelligence streams—OSINT, HUMINT, and IMINT—into a single, unified geospatial interface to provide total situational dominance.
+
+![CyberJoar Dashboard Mockup](assets/dashboard_mockup.png)
 
 ---
 
-## 🚀 Key Features
+## 🚀 Mission-Critical Modules
 
-### 1. **Interactive Geospatial Grid**
-*   **Dynamic Mapping**: Integrated high-resolution terrain, satellite, and tactical dark mode grids.
-*   **Marker Clustering**: Intelligently groups dense intelligence nodes to maintain clarity during high-volume operations.
-*   **Predictive Trajectories**: Visualizes potential asset movement paths using dashed vector overlays.
-*   **Real-Time Focus**: "Fly-to" logic that instantly centers the grid on new or selected intelligence signals.
+### 1. 🛰️ Intelligence Fusion Grid
+*   **Tactical Mapping**: Integrated high-resolution terrain, satellite, and tactical dark mode grids using Leaflet.js.
+*   **Signal Clustering**: Real-time grouping of dense intelligence nodes to maintain operational clarity.
+*   **Predictive Trajectories**: Advanced vector overlays visualizing potential asset movement paths.
+*   **Fly-to Logic**: Instant grid centering on critical signals or new intelligence ingestion.
 
-### 2. **Multi-Modal Intelligence Ingestion**
-*   **Drag-and-Drop OSINT**: Seamlessly upload JPG/PNG imagery with automatic IMINT categorization.
-*   **Bulk Data Ingest**: Supports structured `.csv` and `.json` files for rapid synchronization of large intelligence datasets.
-*   **Geospatial Anchoring**: Manually or automatically anchor tactical reports to precise Latitude/Longitude coordinates.
+### 2. 📊 Predictive Urban Growth
+*   **AI-Driven Modeling**: Evaluation of real estate hotspots based on infrastructure, demand, and growth velocity.
+*   **Growth Score (0-100)**: Real-time velocity score with automated classification (High Growth, Emerging, Stable).
+*   **Investment Roadmap**: ROI outlooks and action recommendations (Buy, Hold, Premium).
+*   **Dynamic Analytics**: Interactive Recharts visualization for price trends and rental yields.
 
-### 3. **Role-Based Access Control (RBAC)**
-*   **Operational Commander (Level 3)**: Full access to system layers, analytics, and bulk ingestion tools.
-*   **Intelligence Analyst (Level 2)**: Access to the strategic database and activity feeds for pattern recognition.
-*   **Field Agent (Level 1)**: Focused mobile-ready interface for reporting and grid visualization.
+### 3. 📂 Tactical Repository (Reports)
+*   **Automated Scheduling**: Define report titles, priorities, and frequencies for future intelligence generation.
+*   **Smart Filtering**: Instant category-based filtering (Intelligence, Predictive, System, Operational).
+*   **Encrypted Exports**: AES-256 logged audit trails for all intelligence documentation.
 
-### 4. **Strategic Workspace**
-*   **Activity Feed**: A vertical timeline of every signal distributed across the operational node.
-*   **Intelligence Database**: A searchable, filterable repository of every piece of verified intel.
-*   **System Analytics**: Real-time distribution charts showing the balance between human, open-source, and imagery intelligence.
-
----
-
-## 📱 Full Resolution Flexibility
-CyberJoar Fusion is built with a **Mobile-First Tactical Design**:
-*   **Desktop**: Expansive sidebars and multi-panel layouts for command center environments.
-*   **Mobile**: Transforms into a touch-optimized app with a **Bottom Navigation Bar** and **Intelligence Drawers** for field use.
-*   **One-Handed Navigation**: Dedicated "Back to Grid" buttons and swipe-ready interfaces for rapid response.
+### 4. 📤 Data Extraction Gateway
+*   **Multi-Format Export**: Extract platform data into verified **JSON**, **CSV**, or high-fidelity **PDF** formats.
+*   **Geospatial Sync**: Coordinate-mapped datasets ready for external GIS platform integration.
+*   **Security Protocol**: All extractions are logged in the system audit trail for total transparency.
 
 ---
 
-## 🛠️ Tech Stack
+## 🔐 Role-Based Access Control (RBAC)
+
+| Role | Access Level | Capabilities |
+| :--- | :--- | :--- |
+| **Operational Commander** | Level 3 | Full system control, bulk ingestion, and global analytics. |
+| **Intelligence Analyst** | Level 2 | Strategic database access, pattern recognition, and reporting. |
+| **Field Agent** | Level 1 | Reporting, grid visualization, and tactical activity feeds. |
+
+---
+
+## 🛠️ Technical Architecture
 
 ### **Frontend**
-*   **React 18**: Modern UI component architecture.
-*   **Tailwind CSS**: Custom tactical aesthetics with glassmorphism and high-contrast dark modes.
-*   **Leaflet.js**: High-performance geospatial rendering and clustering.
-*   **Lucide React**: Crisp, military-grade iconography.
+- **React 18**: UI component architecture.
+- **Framer Motion**: Smooth, high-fidelity micro-animations.
+- **Leaflet.js**: High-performance geospatial rendering.
+- **Tailwind CSS**: Glassmorphism and tactical dark mode styling.
 
 ### **Backend**
-*   **Node.js & Express**: High-concurrency intelligence API.
-*   **MongoDB**: Document storage with **Geospatial Indexing** ($2dsphere) for lightning-fast location queries.
-*   **JWT Security**: Stateless authentication for secure operational sessions.
+- **Node.js & Express**: High-concurrency intelligence API.
+- **MongoDB**: $2dsphere geospatial indexing for lightning-fast location queries.
+- **JWT Security**: Stateless authentication for secure operational sessions.
+- **Cloudinary**: Secure image storage for IMINT assets.
 
 ---
 
-## 🏁 Getting Started
+## 🏁 Deployment Guide
 
 ### **1. Prerequisites**
-*   Node.js (v16+)
-*   MongoDB Atlas or Local Instance
+- Node.js (v16+)
+- MongoDB Atlas account (or local instance)
+- Cloudinary account (for IMINT uploads)
 
-### **2. Installation**
+### **2. Environment Configuration**
+Create a `.env` file in the `/backend` directory:
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_tactical_secret_key
+CLOUDINARY_CLOUD_NAME=your_name
+CLOUDINARY_API_KEY=your_key
+CLOUDINARY_API_SECRET=your_secret
+```
 
-#### **Backend Setup**
+### **3. Installation**
+
+#### **Tactical Backend**
 ```bash
 cd backend
 npm install
-# Create a .env file with your MONGODB_URI and JWT_SECRET
 npm run dev
 ```
 
-#### **Frontend Setup**
+#### **Strategic Frontend**
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### **3. Default Access Gate**
-For rapid testing, use the built-in deployment credentials:
-*   **Commander**: `commander@cyberjoar.ai` / `commander123`
-*   **Analyst**: `analyst@cyberjoar.ai` / `analyst123`
-*   **Field Agent**: `agent@cyberjoar.ai` / `agent123`
+---
+
+## 🔑 Rapid Access Credentials
+For evaluation and testing, use the built-in deployment profiles:
+- **Commander**: `commander@cyberjoar.ai` / `commander123`
+- **Analyst**: `analyst@cyberjoar.ai` / `analyst123`
+- **Field Agent**: `agent@cyberjoar.ai` / `agent123`
 
 ---
 
-## 📜 License
-Developed for the **CYBERJOAR AI Assignment**. All tactical designs and intelligence fusion logic are proprietary to the CyberJoar development framework.
-
----
 © 2026 CYBERJOAR TACTICAL SYSTEMS | CLASSIFIED PROJECT
+*Developed for the CYBERJOAR AI Assignment*
