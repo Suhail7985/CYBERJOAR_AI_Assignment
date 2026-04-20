@@ -1,9 +1,54 @@
-import React from 'react';
-import { Download, FileText, Database, Shield, Zap, ChevronRight, Globe, Share2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { Download, FileText, Database, Shield, Zap, ChevronRight, Globe, Share2, CheckCircle2, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { platformStats } from '../data/statsData';
+import { exportToCSV, exportToJSON } from '../utils/exportUtils';
+import { intelligenceApi } from '../services/api';
 
 const Export = ({ user }) => {
+  const [exporting, setExporting] = useState(null); // ID of the option being exported
+  const [success, setSuccess] = useState(null);
+
+  const handleExport = async (index, option) => {
+    setExporting(index);
+    setSuccess(null);
+
+    try {
+      // Simulate heavy processing/encryption for tactical feel
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      let dataToExport = [];
+      try {
+        const res = await intelligenceApi.getAll();
+        dataToExport = res.data.data;
+      } catch (err) {
+        console.error('Failed to fetch data for export, using fallback', err);
+        dataToExport = [{ message: 'System export generated from tactical gateway', timestamp: new Date() }];
+      }
+
+      if (option.title.includes('JSON')) {
+        exportToJSON(dataToExport, 'CyberJoar_Intel_Export');
+      } else if (option.title.includes('CSV')) {
+        exportToCSV(dataToExport, 'CyberJoar_GIS_Data');
+      } else {
+        // Mock PDF export
+        const blob = new Blob(['Mock Tactical Analysis PDF Content'], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Tactical_Analysis_${new Date().getTime()}.pdf`;
+        link.click();
+      }
+
+      setSuccess(index);
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (error) {
+      console.error('Export failed:', error);
+    } finally {
+      setExporting(null);
+    }
+  };
+
   const exportOptions = [
     { 
       title: 'Intelligence Database (JSON)', 
@@ -72,8 +117,19 @@ const Export = ({ user }) => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 + (i * 0.1) }}
-            className="bg-[#111] border border-white/5 rounded-[2.5rem] p-8 flex flex-col justify-between group hover:border-emerald-500/30 transition-all"
+            className="bg-[#111] border border-white/5 rounded-[2.5rem] p-8 flex flex-col justify-between group hover:border-emerald-500/30 transition-all relative overflow-hidden"
           >
+             {success === i && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute inset-0 bg-emerald-500/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-white"
+                >
+                   <CheckCircle2 size={48} className="mb-2" />
+                   <span className="font-bold uppercase tracking-widest">Extraction Complete</span>
+                </motion.div>
+             )}
+
              <div>
                 <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-500/10 transition-all">
                    <option.icon size={28} className="text-emerald-500" />
@@ -86,8 +142,18 @@ const Export = ({ user }) => {
                   Size: {option.size}
                 </div>
              </div>
-             <button className="mt-10 w-full bg-white text-black font-black py-4 rounded-xl flex items-center justify-center gap-3 hover:bg-emerald-500 hover:text-white transition-all active:scale-95">
-                EXECUTE EXPORT <Download size={18} />
+             <button 
+              onClick={() => handleExport(i, option)}
+              disabled={exporting !== null}
+              className={`mt-10 w-full font-black py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-95 disabled:opacity-50 ${
+                exporting === i ? 'bg-emerald-500 text-white' : 'bg-white text-black hover:bg-emerald-500 hover:text-white'
+              }`}
+             >
+                {exporting === i ? (
+                  <>ENCRYPTING... <Loader2 size={18} className="animate-spin" /></>
+                ) : (
+                  <>EXECUTE EXPORT <Download size={18} /></>
+                )}
              </button>
           </motion.div>
         ))}

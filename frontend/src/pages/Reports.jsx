@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileText, Download, Filter, Calendar, ChevronRight, Shield, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { platformStats } from '../data/statsData';
+import ScheduleModal from '../components/Reports/ScheduleModal';
 
 const Reports = ({ user }) => {
-  const reports = [
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterType, setFilterType] = useState('All');
+  const [reports, setReports] = useState([
     { id: 'RPT-001', title: 'Strategic Threat Assessment', date: '2024-04-18', status: 'Published', type: 'Intelligence' },
     { id: 'RPT-002', title: 'Urban Growth Projection Q2', date: '2024-04-15', status: 'Draft', type: 'Predictive' },
     { id: 'RPT-003', title: 'Signal Fusion Audit', date: '2024-04-12', status: 'Published', type: 'System' },
     { id: 'RPT-004', title: 'Field Agent Activity Log', date: '2024-04-10', status: 'Archived', type: 'Operational' },
-  ];
+  ]);
+
+  const handleSchedule = (newReport) => {
+    setReports([newReport, ...reports]);
+  };
+
+  const filteredReports = reports.filter(report => 
+    filterType === 'All' || report.type === filterType
+  );
+
+  const reportTypes = ['All', 'Intelligence', 'Predictive', 'System', 'Operational'];
 
   return (
     <div className="p-8 space-y-12 animate-in fade-in duration-700">
@@ -55,14 +69,43 @@ const Reports = ({ user }) => {
         <div className="flex justify-between items-center">
           <h2 className="text-sm font-bold text-gray-400 uppercase tracking-[0.3em]">Recent Intelligence Docs</h2>
           <div className="flex gap-3">
-             <button className="flex items-center gap-2 bg-[#1a1a1a] border border-white/10 px-4 py-2 rounded-xl text-xs font-bold text-gray-400 hover:text-white transition-all">
-                <Filter size={14} /> Filter
+             <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className={`flex items-center gap-2 bg-[#1a1a1a] border border-white/10 px-4 py-2 rounded-xl text-xs font-bold transition-all ${showFilters ? 'text-emerald-500 border-emerald-500/30' : 'text-gray-400 hover:text-white'}`}
+             >
+                <Filter size={14} /> Filter {filterType !== 'All' && `(${filterType})`}
              </button>
-             <button className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-600/20">
+             <button 
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-600/20"
+             >
                 <Calendar size={14} /> Schedule New
              </button>
           </div>
         </div>
+
+        {/* Filter Bar */}
+        {showFilters && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="flex flex-wrap gap-2 pb-4 border-b border-white/5"
+          >
+            {reportTypes.map(type => (
+              <button
+                key={type}
+                onClick={() => setFilterType(type)}
+                className={`px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
+                  filterType === type 
+                  ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                  : 'bg-white/5 text-gray-500 hover:bg-white/10 hover:text-gray-300'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
+          </motion.div>
+        )}
 
         <div className="bg-[#111] border border-white/5 rounded-[2.5rem] overflow-hidden">
            <table className="w-full text-left border-collapse">
@@ -77,7 +120,7 @@ const Reports = ({ user }) => {
                  </tr>
               </thead>
               <tbody>
-                 {reports.map((report) => (
+                 {filteredReports.map((report) => (
                    <tr key={report.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
                       <td className="p-6 text-xs font-mono text-gray-500">{report.id}</td>
                       <td className="p-6">
@@ -93,6 +136,7 @@ const Reports = ({ user }) => {
                          <span className={`text-[10px] font-bold px-2 py-1 rounded-md uppercase ${
                             report.status === 'Published' ? 'text-emerald-500 bg-emerald-500/10' :
                             report.status === 'Draft' ? 'text-blue-500 bg-blue-500/10' :
+                            report.status === 'Scheduled' ? 'text-amber-500 bg-amber-500/10' :
                             'text-gray-500 bg-gray-500/10'
                          }`}>
                             {report.status}
@@ -105,10 +149,23 @@ const Reports = ({ user }) => {
                       </td>
                    </tr>
                  ))}
+                 {filteredReports.length === 0 && (
+                   <tr>
+                     <td colSpan="6" className="p-12 text-center text-gray-500 text-sm italic">
+                       No reports found matching the selected filter.
+                     </td>
+                   </tr>
+                 )}
               </tbody>
            </table>
         </div>
       </div>
+
+      <ScheduleModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSchedule={handleSchedule}
+      />
     </div>
   );
 };
