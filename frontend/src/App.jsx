@@ -16,7 +16,6 @@ function App() {
       
       if (savedUser && token) {
         setUser(JSON.parse(savedUser));
-        setView('dashboard');
       }
     } catch (err) {
       console.error('Failed to load session:', err);
@@ -30,7 +29,7 @@ function App() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     setUser(null);
-    setView('landing'); // Back to landing on logout
+    setView('landing'); 
   };
 
   if (loading) return (
@@ -40,7 +39,12 @@ function App() {
   );
 
   if (view === 'landing') {
-    return <LandingPage onGetStarted={() => setView('login')} />;
+    return (
+      <LandingPage 
+        user={user} 
+        onGetStarted={() => setView(user ? 'dashboard' : 'login')} 
+      />
+    );
   }
 
   if (view === 'signup') {
@@ -63,6 +67,16 @@ function App() {
           setView('dashboard');
         }}
         onSwitchToSignup={() => setView('signup')}
+      />
+    );
+  }
+
+  // Final Guard: If view is dashboard but no user exists, fallback to landing
+  if (!user) {
+    return (
+      <LandingPage 
+        user={null} 
+        onGetStarted={() => setView('login')} 
       />
     );
   }

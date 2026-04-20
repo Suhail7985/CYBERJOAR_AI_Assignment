@@ -4,7 +4,7 @@ import IntelSidebar from '../components/Sidebar/IntelSidebar';
 import IntelDetailPanel from '../components/Sidebar/IntelDetailPanel';
 import UploadModal from '../components/Upload/UploadModal';
 import { intelligenceApi } from '../services/api';
-import { Activity, Shield, Map as MapIcon, Database, Layers, Plus, X, FileText } from 'lucide-react';
+import { Activity, Shield, Map as MapIcon, Database, Layers, Plus, X, FileText, LogOut } from 'lucide-react';
 
 const MainDashboard = ({ user, onLogout }) => {
   const [intelData, setIntelData] = useState([]);
@@ -102,14 +102,21 @@ const MainDashboard = ({ user, onLogout }) => {
                  </button>
               </div>
            </div>
-           <button 
-             onClick={() => setIsUploadOpen(true)}
-             title="Ingest Intelligence"
-             className="w-10 h-10 bg-emerald-500 hover:bg-emerald-400 rounded-xl flex items-center justify-center shadow-lg transition-all active:scale-90"
-           >
-             <Plus size={24} className="text-white" />
-           </button>
-        </div>
+            <button 
+              onClick={onLogout}
+              title="Terminate Session"
+              className="w-10 h-10 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all active:scale-90"
+            >
+              <LogOut size={20} />
+            </button>
+            <button 
+              onClick={() => setIsUploadOpen(true)}
+              title="Ingest Intelligence"
+              className="w-10 h-10 bg-emerald-500 hover:bg-emerald-400 rounded-xl flex items-center justify-center shadow-lg transition-all active:scale-90"
+            >
+              <Plus size={24} className="text-white" />
+            </button>
+         </div>
       </div>
 
       {/* Main Content Area */}

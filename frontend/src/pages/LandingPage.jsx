@@ -1,7 +1,7 @@
 import React from 'react';
 import { Shield, Globe, Zap, Database, ChevronRight, Activity, Cpu } from 'lucide-react';
 
-const LandingPage = ({ onGetStarted }) => {
+const LandingPage = ({ user, onGetStarted }) => {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-emerald-500/30 overflow-x-hidden font-inter">
       {/* Navigation */}
@@ -17,7 +17,7 @@ const LandingPage = ({ onGetStarted }) => {
              onClick={onGetStarted}
              className="bg-white text-black font-bold py-2.5 px-6 rounded-full text-sm hover:bg-emerald-400 transition-all active:scale-95"
            >
-              Access Gate
+              {user ? 'Open Dashboard' : 'Access Gate'}
            </button>
         </div>
       </nav>
@@ -43,7 +43,7 @@ const LandingPage = ({ onGetStarted }) => {
                  onClick={onGetStarted}
                  className="bg-emerald-500 hover:bg-emerald-400 text-black font-black py-5 px-10 rounded-2xl transition-all shadow-xl shadow-emerald-500/20 flex items-center gap-3 group active:scale-95"
                >
-                  INITIALIZE SYSTEM <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  {user ? 'CONTINUE TO DASHBOARD' : 'INITIALIZE SYSTEM'} <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                </button>
                <a href="#features" className="text-gray-400 hover:text-white font-bold text-sm uppercase tracking-widest transition-colors">
                   Explore Capabilities
