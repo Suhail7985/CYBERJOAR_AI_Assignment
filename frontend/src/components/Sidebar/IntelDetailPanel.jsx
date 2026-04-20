@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Shield, Activity, MapPin, Clock, Brain, AlertTriangle, FileText, Share2, Trash2 } from 'lucide-react';
+import { X, Shield, Activity, MapPin, Clock, Brain, AlertTriangle, FileText, Share2, Trash2, ChevronLeft } from 'lucide-react';
 import { intelligenceApi } from '../../services/api';
 import Button from '../UI/Button';
 
@@ -29,14 +29,20 @@ const IntelDetailPanel = ({ selectedIntel, onClose }) => {
   if (!selectedIntel) return null;
 
   return (
-    <div className="absolute top-0 right-0 h-full w-96 bg-[#0c0c0c]/95 backdrop-blur-xl border-l border-[#222] shadow-2xl z-[1500] animate-in slide-in-from-right duration-300 transition-all flex flex-col">
+    <div className="fixed md:absolute inset-0 md:inset-y-0 md:right-0 md:left-auto w-full md:w-96 bg-[#0c0c0c]/95 backdrop-blur-xl md:border-l border-[#222] shadow-2xl z-[1500] animate-in slide-in-from-right duration-300 transition-all flex flex-col">
       {/* Header */}
       <div className="p-6 border-b border-[#222] flex justify-between items-center bg-gradient-to-r from-emerald-500/10 to-transparent">
         <div className="flex items-center gap-2">
+            <button 
+              onClick={onClose} 
+              className="md:hidden text-emerald-500 hover:text-emerald-400 transition-colors flex items-center gap-1 mr-2"
+            >
+               <ChevronLeft size={20} />
+            </button>
             <Shield size={18} className="text-emerald-500" />
             <h2 className="text-sm font-bold tracking-widest uppercase text-gray-400">Tactical Detail</h2>
         </div>
-        <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors p-1 hover:bg-white/5 rounded-md">
+        <button onClick={onClose} className="hidden md:block text-gray-500 hover:text-white transition-colors p-1 hover:bg-white/5 rounded-md">
             <X size={20} />
         </button>
       </div>

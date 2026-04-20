@@ -1,11 +1,20 @@
 import React from 'react';
-import { Search, Filter, Clock, MapPin, Eye, AlertCircle, ChevronRight } from 'lucide-react';
+import { Search, Filter, Clock, MapPin, Eye, AlertCircle, ChevronRight, ChevronLeft, X } from 'lucide-react';
 
 const IntelSidebar = ({ intelList, selectedId, onSelect, onFilterChange, loading, onGenerateReport, user }) => {
   return (
-    <div className="w-96 h-full bg-[#0f0f0f] border-l border-[#222] flex flex-col shadow-2xl z-20">
+    <div className="w-full md:w-96 h-full bg-[#0f0f0f] border-l border-[#222] flex flex-col shadow-2xl z-20">
       {/* Search & Filter Section */}
       <div className="p-6 border-b border-[#222] space-y-4">
+        <div className="flex items-center justify-between md:hidden mb-2">
+           <button 
+             onClick={() => onSelect(null)} 
+             className="flex items-center gap-2 text-emerald-500 text-xs font-bold uppercase tracking-widest"
+           >
+              <ChevronLeft size={16} /> Back to Grid
+           </button>
+           <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Intel List</span>
+        </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           <input 

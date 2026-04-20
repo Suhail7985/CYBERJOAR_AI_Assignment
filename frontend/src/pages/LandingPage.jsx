@@ -37,10 +37,10 @@ const LandingPage = ({ user, onGetStarted }) => {
             <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 py-2 px-5 rounded-full text-emerald-500 text-xs font-bold uppercase tracking-[0.3em] mb-10 animate-in fade-in slide-in-from-bottom-4">
                <Zap size={14} className="animate-bounce" /> Tactical Awareness 2.0
             </div>
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-10 leading-[0.95] animate-in fade-in slide-in-from-bottom-6 duration-700">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter mb-10 leading-[0.95] animate-in fade-in slide-in-from-bottom-6 duration-700">
                Master the <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-500 to-blue-600">Information Domain</span>
             </h1>
-            <p className="text-gray-400 text-xl md:text-2xl max-w-3xl mx-auto mb-14 leading-relaxed font-light animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <p className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-14 leading-relaxed font-light animate-in fade-in slide-in-from-bottom-8 duration-1000">
                The ultimate common operating picture for field commanders. Fuse OSINT, HUMINT, and IMINT into actionable tactical superiority.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 animate-in fade-in slide-in-from-bottom-10 duration-1000">

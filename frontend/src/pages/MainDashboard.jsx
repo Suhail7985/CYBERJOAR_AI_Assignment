@@ -4,7 +4,7 @@ import IntelSidebar from '../components/Sidebar/IntelSidebar';
 import IntelDetailPanel from '../components/Sidebar/IntelDetailPanel';
 import UploadModal from '../components/Upload/UploadModal';
 import { intelligenceApi } from '../services/api';
-import { Activity, Shield, Map as MapIcon, Database, Layers, Plus, X, FileText, LogOut } from 'lucide-react';
+import { Activity, Shield, Map as MapIcon, Database, Layers, Plus, X, FileText, LogOut, ChevronLeft } from 'lucide-react';
 
 const MainDashboard = ({ user, onLogout }) => {
   const [intelData, setIntelData] = useState([]);
@@ -18,6 +18,8 @@ const MainDashboard = ({ user, onLogout }) => {
   const [mapStyle, setMapStyle] = useState('dark');
   const [activeView, setActiveView] = useState('map'); // 'map', 'database', 'activity'
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar toggle
+
 
   const fetchIntel = async (showLoading = true) => {
     try {
@@ -44,16 +46,16 @@ const MainDashboard = ({ user, onLogout }) => {
 
 
   return (
-    <div className="flex h-screen w-full bg-[#0a0a0a] text-white overflow-hidden">
-      {/* Navigation Rail */}
-      <div className="w-16 h-full bg-[#111] border-r border-[#222] flex flex-col items-center py-6 gap-8">
+    <div className="flex flex-col md:flex-row h-screen w-full bg-[#0a0a0a] text-white overflow-hidden">
+      {/* Navigation Rail - Bottom Bar on Mobile, Sidebar on Desktop */}
+      <div className="w-full md:w-16 h-16 md:h-full bg-[#111] border-t md:border-t-0 md:border-r border-[#222] flex flex-row md:flex-col items-center justify-around md:justify-start md:py-6 gap-4 md:gap-8 order-2 md:order-1 z-[100]">
         <div 
           onClick={() => {
             setActiveView('map');
             setSelectedIntel(null);
             fetchIntel(); // Refresh data from server
           }}
-          className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/20 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+          className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center md:mb-4 shadow-lg shadow-emerald-500/20 cursor-pointer hover:scale-105 active:scale-95 transition-all"
         >
           <Shield size={24} className="text-white" />
         </div>
@@ -78,30 +80,39 @@ const MainDashboard = ({ user, onLogout }) => {
         >
           <Activity size={22} />
         </button>
+        
+        {/* Mobile Sidebar Toggle */}
+        <button 
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className={`p-3 rounded-xl md:hidden transition-all ${isSidebarOpen ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500'}`}
+        >
+          <FileText size={22} />
+        </button>
+
         <button 
           onClick={() => setActiveView('layers')}
           title="System Layers"
-          className={`p-3 rounded-xl transition-all ${activeView === 'layers' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'} ${user?.role !== 'Commander' ? 'hidden' : ''}`}
+          className={`p-3 rounded-xl transition-all hidden md:block ${activeView === 'layers' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'} ${user?.role !== 'Commander' ? 'hidden' : ''}`}
         >
           <Layers size={22} />
         </button>
         
-        <div className="mt-auto pb-4 flex flex-col gap-4">
-           <div className="group relative">
-              <div className="w-10 h-10 bg-[#1a1a1a] rounded-xl flex items-center justify-center border border-white/5 cursor-help">
-                 <span className="text-emerald-500 font-bold text-xs">{user?.name?.substring(0, 2).toUpperCase()}</span>
-              </div>
-              <div className="absolute left-14 top-0 bg-[#1a1a1a] border border-[#333] p-3 rounded-xl invisible group-hover:visible transition-all w-48 z-[50]">
-                 <div className="text-xs font-bold text-white mb-1">{user?.name}</div>
-                 <div className="text-[10px] text-emerald-500 uppercase font-bold tracking-tighter mb-2">{user?.role}</div>
-                 <button 
-                   onClick={onLogout}
-                   className="w-full text-left text-[10px] text-red-500 hover:text-red-400 font-bold flex items-center gap-2 border-t border-white/5 pt-2"
-                 >
-                    TERMINATE SESSION
-                 </button>
-              </div>
-           </div>
+        <div className="md:mt-auto flex flex-row md:flex-col gap-4">
+            <div className="group relative hidden md:block">
+               <div className="w-10 h-10 bg-[#1a1a1a] rounded-xl flex items-center justify-center border border-white/5 cursor-help">
+                  <span className="text-emerald-500 font-bold text-xs">{user?.name?.substring(0, 2).toUpperCase()}</span>
+               </div>
+               <div className="absolute left-14 bottom-0 md:top-0 bg-[#1a1a1a] border border-[#333] p-3 rounded-xl invisible group-hover:visible transition-all w-48 z-[150]">
+                  <div className="text-xs font-bold text-white mb-1">{user?.name}</div>
+                  <div className="text-[10px] text-emerald-500 uppercase font-bold tracking-tighter mb-2">{user?.role}</div>
+                  <button 
+                    onClick={onLogout}
+                    className="w-full text-left text-[10px] text-red-500 hover:text-red-400 font-bold flex items-center gap-2 border-t border-white/5 pt-2"
+                  >
+                     TERMINATE SESSION
+                  </button>
+               </div>
+            </div>
             <button 
               onClick={onLogout}
               title="Terminate Session"
@@ -122,24 +133,24 @@ const MainDashboard = ({ user, onLogout }) => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col relative">
         {/* Header Stats Bar */}
-        <header className="h-16 border-b border-[#222] bg-[#0c0c0c] flex items-center px-6 justify-between z-10">
+        <header className="h-16 border-b border-[#222] bg-[#0c0c0c] flex items-center px-4 md:px-6 justify-between z-10">
           <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold tracking-tight uppercase text-gray-400">
-              Live Operation Dashboard <span className="text-emerald-500 ml-2 font-mono">[AG-ALPHA]</span>
+            <h1 className="text-sm md:text-lg font-semibold tracking-tight uppercase text-gray-400">
+              Live Operation <span className="hidden sm:inline">Dashboard</span> <span className="text-emerald-500 ml-1 sm:ml-2 font-mono">[AG-ALPHA]</span>
             </h1>
           </div>
-          <div className="flex items-center gap-8">
-            <div className="flex flex-col items-end">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Active Assets</span>
-              <span className="text-xl font-mono text-emerald-400">1,284</span>
+          <div className="flex items-center gap-4 md:gap-8 overflow-x-auto no-scrollbar">
+            <div className="flex flex-col items-end min-w-fit">
+              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-bold">Assets</span>
+              <span className="text-sm md:text-xl font-mono text-emerald-400">1,284</span>
             </div>
-            <div className="flex flex-col items-end border-l border-[#222] pl-8">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Total Intel Flow</span>
-              <span className="text-xl font-mono text-white">{intelData.length}</span>
+            <div className="flex flex-col items-end border-l border-[#222] pl-4 md:pl-8 min-w-fit">
+              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-bold">Intel</span>
+              <span className="text-sm md:text-xl font-mono text-white">{intelData.length}</span>
             </div>
-            <div className="flex flex-col items-end border-l border-[#222] pl-8">
-              <span className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Risk Level</span>
-              <span className="text-xl font-mono text-orange-500 italic">ELEVATED</span>
+            <div className="hidden xs:flex flex-col items-end border-l border-[#222] pl-4 md:pl-8 min-w-fit">
+              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-bold">Risk</span>
+              <span className="text-sm md:text-xl font-mono text-orange-500 italic">ELEVATED</span>
             </div>
           </div>
         </header>
@@ -182,17 +193,23 @@ const MainDashboard = ({ user, onLogout }) => {
               </div>
             </div>
           ) : activeView === 'database' ? (
-            <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[#0d0d0d]">
-              <div className="flex justify-between items-center mb-8">
+            <div className="flex-1 p-4 md:p-8 overflow-y-auto custom-scrollbar bg-[#0d0d0d]">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
+                   <button 
+                     onClick={() => setActiveView('map')}
+                     className="flex items-center gap-2 text-emerald-500 text-xs font-bold uppercase tracking-widest mb-4 hover:text-emerald-400 transition-colors"
+                   >
+                      <ChevronLeft size={16} /> Back to Tactical Grid
+                   </button>
                    <h2 className="text-2xl font-bold flex items-center gap-3">
                       <Database className="text-emerald-500" /> Strategic Intelligence Database
                    </h2>
                    <p className="text-sm text-gray-500 mt-1">Unified view of all OSINT, HUMINT, and IMINT assets.</p>
                 </div>
               </div>
-              <div className="bg-[#111] border border-[#222] rounded-2xl overflow-hidden shadow-2xl">
-                 <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto rounded-2xl border border-[#222] shadow-2xl bg-[#111]">
+                 <table className="w-full text-left border-collapse min-w-[600px]">
                     <thead>
                        <tr className="bg-[#151515] border-b border-[#222]">
                           <th className="p-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Classification</th>
@@ -240,8 +257,14 @@ const MainDashboard = ({ user, onLogout }) => {
               </div>
             </div>
           ) : activeView === 'activity' ? (
-            <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[#0d0d0d]">
+            <div className="flex-1 p-4 md:p-8 overflow-y-auto custom-scrollbar bg-[#0d0d0d]">
               <div className="max-w-3xl mx-auto space-y-6">
+                 <button 
+                   onClick={() => setActiveView('map')}
+                   className="flex items-center gap-2 text-emerald-500 text-xs font-bold uppercase tracking-widest hover:text-emerald-400 transition-colors"
+                 >
+                    <ChevronLeft size={16} /> Back to Tactical Grid
+                 </button>
                  <h2 className="text-2xl font-bold flex items-center gap-3 mb-8">
                     <Activity className="text-emerald-500" /> Operational Activity Feed
                  </h2>
@@ -267,12 +290,18 @@ const MainDashboard = ({ user, onLogout }) => {
               </div>
             </div>
           ) : (
-            <div className="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[#0d0d0d]">
+            <div className="flex-1 p-4 md:p-8 overflow-y-auto custom-scrollbar bg-[#0d0d0d]">
                <div className="max-w-4xl mx-auto">
+                  <button 
+                    onClick={() => setActiveView('map')}
+                    className="flex items-center gap-2 text-emerald-500 text-xs font-bold uppercase tracking-widest mb-6 hover:text-emerald-400 transition-colors"
+                  >
+                     <ChevronLeft size={16} /> Back to Tactical Grid
+                  </button>
                   <h2 className="text-2xl font-bold flex items-center gap-3 mb-8">
                     <Layers className="text-emerald-500" /> System Layers & Analytics
                   </h2>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                      <div className="bg-[#111] border border-[#222] p-6 rounded-2xl">
                         <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Source Distribution</h3>
                         <div className="space-y-4">
@@ -298,14 +327,14 @@ const MainDashboard = ({ user, onLogout }) => {
                      </div>
                      <div className="bg-[#111] border border-[#222] p-6 rounded-2xl">
                         <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">System Health</h3>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                            <div className="bg-[#1a1a1a] p-4 rounded-xl border border-[#222]">
                               <div className="text-[10px] text-gray-500 uppercase font-bold">API Latency</div>
                               <div className="text-xl font-mono text-emerald-500">24ms</div>
                            </div>
                            <div className="bg-[#1a1a1a] p-4 rounded-xl border border-[#222]">
                               <div className="text-[10px] text-gray-500 uppercase font-bold">Uptime</div>
-                              <div className="text-xl font-mono text-emerald-500">99.9%</div>
+                              <div className="text-xl font-mono text-emerald-400">99.9%</div>
                            </div>
                         </div>
                      </div>
@@ -314,16 +343,32 @@ const MainDashboard = ({ user, onLogout }) => {
             </div>
           )}
 
-          {/* Sidebar */}
-          <IntelSidebar 
-            intelList={intelData} 
-            selectedId={selectedIntel?._id}
-            loading={loading}
-            onSelect={setSelectedIntel}
-            onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
-            onGenerateReport={() => setIsReportOpen(true)}
-            user={user}
-          />
+          {/* Sidebar - Toggled on mobile */}
+          <div className={`
+            fixed inset-y-0 right-0 z-[110] transition-transform duration-300 md:relative md:translate-x-0 md:z-20
+            ${isSidebarOpen ? 'translate-x-0 w-full' : 'translate-x-full md:w-auto'}
+          `}>
+             {/* Mobile Close Overlay */}
+             {isSidebarOpen && (
+               <div 
+                 onClick={() => setIsSidebarOpen(false)}
+                 className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden"
+               ></div>
+             )}
+             
+             <IntelSidebar 
+                intelList={intelData} 
+                selectedId={selectedIntel?._id}
+                loading={loading}
+                onSelect={(item) => {
+                  setSelectedIntel(item);
+                  setIsSidebarOpen(false); // Close on mobile after selection
+                }}
+                onFilterChange={(newFilters) => setFilters(prev => ({...prev, ...newFilters}))}
+                onGenerateReport={() => setIsReportOpen(true)}
+                user={user}
+             />
+          </div>
         </div>
       </div>
 

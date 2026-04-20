@@ -88,7 +88,7 @@ const DashboardMap = ({ data, onMarkerClick, selectedItem, mapStyle = 'dark' }) 
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url={tileUrls[mapStyle] || tileUrls.dark}
         />
-        <ZoomControl position="bottomright" />
+        <ZoomControl position="topright" />
         <MapUpdater selectedItem={selectedItem} />
         
         {/* Mock Trajectory Polyline */}
