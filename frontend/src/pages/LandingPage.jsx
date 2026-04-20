@@ -1,7 +1,18 @@
 import React from 'react';
 import { Shield, Globe, Zap, Database, ChevronRight, Activity, Cpu, Layers } from 'lucide-react';
 
-const LandingPage = ({ user, onGetStarted }) => {
+import { useNavigate, Link } from 'react-router-dom';
+
+const LandingPage = ({ user }) => {
+  const navigate = useNavigate();
+
+  const onGetStarted = () => {
+    if (user) {
+      navigate('/');
+    } else {
+      navigate('/login');
+    }
+  };
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-emerald-500/30 overflow-x-hidden font-inter">
       {/* Navigation */}

@@ -4,9 +4,9 @@ import IntelSidebar from '../components/Sidebar/IntelSidebar';
 import IntelDetailPanel from '../components/Sidebar/IntelDetailPanel';
 import UploadModal from '../components/Upload/UploadModal';
 import { intelligenceApi } from '../services/api';
-import { Activity, Shield, Map as MapIcon, Database, Layers, Plus, X, FileText, LogOut, ChevronLeft } from 'lucide-react';
+import { Activity, Shield, Map as MapIcon, Database, Layers, Plus, X, FileText, LogOut, ChevronLeft, Menu } from 'lucide-react';
 
-const MainDashboard = ({ user, onLogout }) => {
+const FusionDashboard = ({ user, onLogout }) => {
   const [intelData, setIntelData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedIntel, setSelectedIntel] = useState(null);
@@ -46,117 +46,58 @@ const MainDashboard = ({ user, onLogout }) => {
 
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full bg-[#0a0a0a] text-white overflow-hidden">
-      {/* Navigation Rail - Bottom Bar on Mobile, Sidebar on Desktop */}
-      <div className="w-full md:w-16 h-16 md:h-full bg-[#111] border-t md:border-t-0 md:border-r border-[#222] flex flex-row md:flex-col items-center justify-around md:justify-start md:py-6 gap-4 md:gap-8 order-2 md:order-1 z-[100]">
-        <div 
-          onClick={() => {
-            setActiveView('map');
-            setSelectedIntel(null);
-            fetchIntel(); // Refresh data from server
-          }}
-          className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center md:mb-4 shadow-lg shadow-emerald-500/20 cursor-pointer hover:scale-105 active:scale-95 transition-all"
-        >
-          <Shield size={24} className="text-white" />
-        </div>
-        <button 
-          onClick={() => setActiveView('map')}
-          title="Map Grid"
-          className={`p-3 rounded-xl transition-all ${activeView === 'map' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'}`}
-        >
-          <MapIcon size={22} />
-        </button>
-        <button 
-          onClick={() => setActiveView('database')}
-          title="Intelligence Database"
-          className={`p-3 rounded-xl transition-all ${activeView === 'database' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'} ${user?.role === 'Field Agent' ? 'hidden' : ''}`}
-        >
-          <Database size={22} />
-        </button>
-        <button 
-          onClick={() => setActiveView('activity')}
-          title="Activity Feed"
-          className={`p-3 rounded-xl transition-all ${activeView === 'activity' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'}`}
-        >
-          <Activity size={22} />
-        </button>
-        
-        {/* Mobile Sidebar Toggle */}
-        <button 
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className={`p-3 rounded-xl md:hidden transition-all ${isSidebarOpen ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500'}`}
-        >
-          <FileText size={22} />
-        </button>
+    <div className="flex flex-col h-[calc(100vh-64px)] w-full bg-[#0a0a0a] text-white overflow-hidden">
+      {/* Module Sub-Header */}
+      <div className="h-16 border-b border-white/5 bg-[#0c0c0c] flex items-center px-6 justify-between shrink-0">
+        <div className="flex items-center gap-8">
+           <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+              <Shield size={16} className="text-emerald-500" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Fusion Module</span>
+           </div>
 
-        <button 
-          onClick={() => setActiveView('layers')}
-          title="System Layers"
-          className={`p-3 rounded-xl transition-all hidden md:block ${activeView === 'layers' ? 'text-emerald-500 bg-emerald-500/10' : 'text-gray-500 hover:text-white'} ${user?.role !== 'Commander' ? 'hidden' : ''}`}
-        >
-          <Layers size={22} />
-        </button>
-        
-        <div className="md:mt-auto flex flex-row md:flex-col gap-4">
-            <div className="group relative hidden md:block">
-               <div className="w-10 h-10 bg-[#1a1a1a] rounded-xl flex items-center justify-center border border-white/5 cursor-help">
-                  <span className="text-emerald-500 font-bold text-xs">{user?.name?.substring(0, 2).toUpperCase()}</span>
-               </div>
-               <div className="absolute left-14 bottom-0 md:top-0 bg-[#1a1a1a] border border-[#333] p-3 rounded-xl invisible group-hover:visible transition-all w-48 z-[150]">
-                  <div className="text-xs font-bold text-white mb-1">{user?.name}</div>
-                  <div className="text-[10px] text-emerald-500 uppercase font-bold tracking-tighter mb-2">{user?.role}</div>
-                  <button 
-                    onClick={onLogout}
-                    className="w-full text-left text-[10px] text-red-500 hover:text-red-400 font-bold flex items-center gap-2 border-t border-white/5 pt-2"
-                  >
-                     TERMINATE SESSION
-                  </button>
-               </div>
-            </div>
-            <button 
-              onClick={onLogout}
-              title="Terminate Session"
-              className="w-10 h-10 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all active:scale-90"
-            >
-              <LogOut size={20} />
-            </button>
-            <button 
-              onClick={() => setIsUploadOpen(true)}
-              title="Ingest Intelligence"
-              className="w-10 h-10 bg-emerald-500 hover:bg-emerald-400 rounded-xl flex items-center justify-center shadow-lg transition-all active:scale-90"
-            >
-              <Plus size={24} className="text-white" />
-            </button>
-         </div>
+           <div className="h-6 w-[1px] bg-white/10 hidden sm:block"></div>
+
+           <nav className="flex items-center gap-6">
+              {[
+                { id: 'map', label: 'Tactical Grid', icon: MapIcon },
+                { id: 'database', label: 'Intelligence DB', icon: Database },
+                { id: 'activity', label: 'Signal Feed', icon: Activity },
+                { id: 'layers', label: 'System Layers', icon: Layers },
+              ].map(view => (
+                <button 
+                  key={view.id}
+                  onClick={() => setActiveView(view.id)}
+                  className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-all ${
+                    activeView === view.id ? 'text-white' : 'text-gray-500 hover:text-gray-300'
+                  }`}
+                >
+                   <view.icon size={14} className={activeView === view.id ? 'text-emerald-500' : ''} />
+                   <span className="hidden xs:inline">{view.label}</span>
+                </button>
+              ))}
+           </nav>
+        </div>
+
+        <div className="flex items-center gap-3">
+           {/* Mobile: toggle intel sidebar */}
+           <button
+             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+             className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white transition-colors"
+             title="Toggle Intel List"
+           >
+             <Menu size={18} />
+           </button>
+           <button 
+             onClick={() => setIsUploadOpen(true)}
+             className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-black py-2 px-4 rounded-lg transition-all flex items-center gap-2 shadow-lg shadow-emerald-600/20"
+           >
+              <Plus size={14} /> INGEST DATA
+           </button>
+        </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col relative">
-        {/* Header Stats Bar */}
-        <header className="h-16 border-b border-[#222] bg-[#0c0c0c] flex items-center px-4 md:px-6 justify-between z-10">
-          <div className="flex items-center gap-4">
-            <h1 className="text-sm md:text-lg font-semibold tracking-tight uppercase text-gray-400">
-              Live Operation <span className="hidden sm:inline">Dashboard</span> <span className="text-emerald-500 ml-1 sm:ml-2 font-mono">[AG-ALPHA]</span>
-            </h1>
-          </div>
-          <div className="flex items-center gap-4 md:gap-8 overflow-x-auto no-scrollbar">
-            <div className="flex flex-col items-end min-w-fit">
-              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-bold">Assets</span>
-              <span className="text-sm md:text-xl font-mono text-emerald-400">1,284</span>
-            </div>
-            <div className="flex flex-col items-end border-l border-[#222] pl-4 md:pl-8 min-w-fit">
-              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-bold">Intel</span>
-              <span className="text-sm md:text-xl font-mono text-white">{intelData.length}</span>
-            </div>
-            <div className="hidden xs:flex flex-col items-end border-l border-[#222] pl-4 md:pl-8 min-w-fit">
-              <span className="text-[8px] md:text-[10px] text-gray-500 uppercase tracking-widest font-bold">Risk</span>
-              <span className="text-sm md:text-xl font-mono text-orange-500 italic">ELEVATED</span>
-            </div>
-          </div>
-        </header>
-
-        {/* Workspace */}
-        <div className="flex-1 flex overflow-hidden">
+      {/* Workspace */}
+      <div className="flex-1 flex overflow-hidden">
           {activeView === 'map' ? (
             <div className="flex-1 relative bg-[#111]">
               <DashboardMap 
@@ -370,7 +311,6 @@ const MainDashboard = ({ user, onLogout }) => {
              />
           </div>
         </div>
-      </div>
 
       <IntelDetailPanel 
         selectedIntel={selectedIntel} 
@@ -456,4 +396,4 @@ const MainDashboard = ({ user, onLogout }) => {
   );
 };
 
-export default MainDashboard;
+export default FusionDashboard;

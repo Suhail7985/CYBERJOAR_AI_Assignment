@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Shield, Lock, Mail, User, ChevronRight, AlertCircle } from 'lucide-react';
 import { authApi } from '../services/api';
 
-const SignupPage = ({ onSignupSuccess, onSwitchToLogin }) => {
+import { useNavigate } from 'react-router-dom';
+
+const SignupPage = ({ onSignupSuccess }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -120,7 +123,7 @@ const SignupPage = ({ onSignupSuccess, onSwitchToLogin }) => {
 
         <div className="mt-8 text-center">
            <p className="text-gray-500 text-xs">
-              Already have clearance? <button onClick={onSwitchToLogin} className="text-blue-500 font-bold hover:underline">Access Gate</button>
+              Already have clearance? <button onClick={() => navigate('/login')} className="text-blue-500 font-bold hover:underline">Access Gate</button>
            </p>
         </div>
       </div>

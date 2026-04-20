@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { Shield, Lock, Mail, ChevronRight, AlertCircle, Info } from 'lucide-react';
 import { authApi } from '../services/api';
 
-const LoginPage = ({ onLoginSuccess, onSwitchToSignup }) => {
+import { useNavigate } from 'react-router-dom';
+
+const LoginPage = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -120,7 +123,7 @@ const LoginPage = ({ onLoginSuccess, onSwitchToSignup }) => {
 
         <div className="mt-8 text-center">
            <p className="text-gray-500 text-xs">
-              Unauthorized access is strictly prohibited. <button onClick={onSwitchToSignup} className="text-emerald-500 font-bold hover:underline">New Recruitment</button>
+              Unauthorized access is strictly prohibited. <button onClick={() => navigate('/signup')} className="text-emerald-500 font-bold hover:underline">New Recruitment</button>
            </p>
         </div>
       </div>

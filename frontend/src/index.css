@@ -48,3 +48,98 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #3a3a3a;
 }
+
+/* Dashboard Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-in {
+  animation-duration: 700ms;
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation-name: fadeIn;
+}
+
+.slide-in-from-bottom {
+  animation-name: slideInUp;
+}
+
+/* Leaflet Customizations */
+.leaflet-container {
+  background: #0a0a0a !important;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  background: #111 !important;
+  color: white !important;
+  border: 1px solid #333;
+  border-radius: 12px;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: #111 !important;
+}
+
+/* ===========================
+   ALL ANIMATION UTILITIES
+   =========================== */
+.animate-in {
+  animation-fill-mode: both;
+  animation-duration: 400ms;
+}
+
+/* fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in { animation-name: fadeIn; }
+
+/* slide-in-from-bottom */
+@keyframes slideInFromBottom {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.slide-in-from-bottom { animation-name: slideInFromBottom; }
+
+/* slide-in-from-top-2 */
+@keyframes slideInFromTop2 {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+.slide-in-from-top-2 { animation-name: slideInFromTop2; }
+
+/* slide-in-from-right */
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.slide-in-from-right { animation-name: slideInFromRight; }
+
+/* zoom-in-95 */
+@keyframes zoomIn95 {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+.zoom-in-95 { animation-name: zoomIn95; }
+
+/* duration modifiers */
+.duration-200 { animation-duration: 200ms; }
+.duration-300 { animation-duration: 300ms; }
+.duration-500 { animation-duration: 500ms; }
+.duration-700 { animation-duration: 700ms; }
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #444; }
